@@ -26,7 +26,7 @@
 #if UI_HAS_JOYSTICK
   #define PRESS_LABEL "press Enter"
 #else
-  #define PRESS_LABEL "long press"
+  #define PRESS_LABEL "Long Press"
 #endif
 
 #include "icons.h"
@@ -193,12 +193,55 @@ public:
     display.fillRect(0, 0, display.width(), 12);
     char tmp[80];
     // node name
+    //display.setTextSize(1);
+    //display.setColor(UIColor::title_txt);
+    //char filtered_name[sizeof(_node_prefs->node_name)];
+    //display.translateUTF8ToBlocks(filtered_name, _node_prefs->node_name, sizeof(filtered_name));
+    //display.setCursor(0, 2);
+    //display.print(filtered_name);
+    // node name calcolo normale
+    //display.setTextSize(1);
+    //display.setColor(UIColor::title_txt);
+    //char filtered_name[sizeof(_node_prefs->node_name)];
+    //display.translateUTF8ToBlocks(filtered_name, _node_prefs->node_name, sizeof(filtered_name));
+    
+    // Calcola lo spazio disponibile prima della batteria (width - 32px per icona batteria/stato)
+    //int max_title_width = display.width() - 32; 
+    //display.drawTextEllipsized(0, 2, max_title_width, filtered_name);
+    // node name
     display.setTextSize(1);
     display.setColor(UIColor::title_txt);
     char filtered_name[sizeof(_node_prefs->node_name)];
     display.translateUTF8ToBlocks(filtered_name, _node_prefs->node_name, sizeof(filtered_name));
-    display.setCursor(0, 2);
-    display.print(filtered_name);
+
+    int max_title_width = display.width() - 32;
+
+    // Se il nome entra interamente nello spazio, lo stampiamo così com'è
+    if (display.getTextWidth(filtered_name) <= max_title_width) {
+        display.setCursor(0, 2);
+        display.print(filtered_name);
+    } else {
+        // Se è troppo lungo, tagliamo dall'inizio aggiungendo "..."
+        char display_str[sizeof(filtered_name) + 4];
+        int len = strlen(filtered_name);
+        int start_idx = 0;
+
+        while (start_idx < len) {
+            snprintf(display_str, sizeof(display_str), "...%s", &filtered_name[start_idx]);
+            if (display.getTextWidth(display_str) <= max_title_width) {
+                break;
+            }
+            start_idx++;
+        }
+
+        display.setCursor(0, 2);
+        display.print(display_str);
+    }
+
+
+
+
+
 
     // battery voltage
     renderBatteryIndicator(display, _task->getBattMilliVolts());
@@ -867,7 +910,7 @@ void UITask::loop() {
       if(!board.isExternalPowered()) {
         if (_display != NULL) {
           _display->startFrame();
-          _display->setTextSize(2);
+          _display->setTextSize(1);
           _display->setColor(UIColor::warning_txt);
           _display->drawTextCentered(_display->width() / 2, 20, "Low Battery.");
           _display->drawTextCentered(_display->width() / 2, 40, "Shutting Down!");

@@ -142,7 +142,6 @@ void setup() {
   InternalFS.begin();
   #if defined(QSPIFLASH)
     if (!QSPIFlash.begin()) {
-      // debug output might not be available at this point, might be too early. maybe should fall back to InternalFS here?
       MESH_DEBUG_PRINTLN("CustomLFS_QSPIFlash: failed to initialize");
     } else {
       MESH_DEBUG_PRINTLN("CustomLFS_QSPIFlash: initialized successfully");
@@ -238,13 +237,15 @@ void setup() {
 #endif
 
 #ifdef DISPLAY_CLASS
-  ui_task.begin(disp, &sensors, the_mesh.getNodePrefs());  // still want to pass this in as dependency, as prefs might be moved
+  ui_task.begin(disp, &sensors, the_mesh.getNodePrefs());
 #endif
 
   board.onBootComplete();
 }
 
 void loop() {
+ // board.update(); // <-- Controllo stato pulsante USER e timer retroilluminazione 5s
+
   the_mesh.loop();
   interface_manager.loop();
   sensors.loop();
