@@ -7,6 +7,4 @@
 # PlatformIO & VS Code
 .pio/
 .vscode/
-
-# Copies
-* copy/
+*.code-workspace
