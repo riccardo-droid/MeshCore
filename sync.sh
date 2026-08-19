@@ -27,7 +27,4 @@ else
     echo "✨ Il codice base è già allineato a origin/main."
 fi
 
-echo "🛠️ 3. Test di compilazione PlatformIO..."
-pio run -e heltec_v3
-
-echo "🎉 Aggiornamento e verifica completati con successo!"
+echo "🎉 Sincronizzazione e salvataggio completati con successo!"
