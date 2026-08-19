@@ -1,4 +1,5 @@
 #include "Dispatcher.h"
+#include <Adafruit_VL53L0X.h>
 
 #if MESH_PACKET_LOGGING
   #include <Arduino.h>

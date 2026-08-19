@@ -1,4 +1,9 @@
 #include <Arduino.h>   // needed for PlatformIO
+
+#if ENV_INCLUDE_VL53L0X == 1
+  #include <Adafruit_VL53L0X.h>
+#endif
+
 #include <Mesh.h>
 #include "MyMesh.h"
 
